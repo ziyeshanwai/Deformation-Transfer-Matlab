@@ -43,21 +43,26 @@ for i=1:length(FS4)                 %*- For ith triangle
                 end
             end
             %Vectorized index of triangle U1(u1, u2, u3, u4) and U2(u1 ~)
-            U1 = FS4(i,:); U2 = FS4(Adj_idx(i,j),:);
+            U1 = FS4(i,:); U2 = FS4(Adj_idx(i,j),:); % U1 U2 是两个共享三角形的点序
             for k=1:3   %x, y, z
                 row = repmat((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3, [4 1]);
-                col1 = repmat( (U1-1)*3 + k, [3 1])';
+                col1 = repmat( (U1-1)*3 + k, [3 1])';  % 什么意思？
                 val1 = ws.*E{i}';%*- value which corresponds to non-overlapping vertices
                 if sum(constid(1,:))                    %Constrinat exist
+%                     C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) = C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) ...
+%                     -val1(constid(1,:)>0,:)' .* VT4(marker(marker==U1(constid(1,:)>0),2),k)';
                     C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) = C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) ...
-                    -val1(constid(1,:)>0,:)' .* VT4(marker(marker==U1(constid(1,:)>0),2),k)';
+                    -val1(constid(1,:)>0,:)' .* VT4(marker(marker(:,1)==U1(constid(1,:)>0),2),k)';
                     val1(constid(1,:)>0,:) = 0;                    
                 end
                 col2 = repmat( (U2-1)*3 + k, [3 1])';
                 val2 = -ws.*E{Adj_idx(i,j)}';%*- value which corresponds to overlapping vertices
                 if sum(constid(2,:))                    %Constrinat exist
+%                     C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) = C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) ...
+%                     -val2(constid(2,:)>0, :)' .* VT4(marker(marker==U2(constid(2,:)>0),2), k)';
+                
                     C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) = C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) ...
-                    -val2(constid(2,:)>0,:)' .* VT4(marker(marker==U2(constid(2,:)>0),2),k)';
+                    -val2(constid(2,:)>0, :)' .* VT4(marker(marker(:, 1)==U2(constid(2,:)>0),2), k)';
                     val2(constid(2,:)>0,:) = 0;
                 end
                 I1((1:12)+(i-1)*3*3*3*4 + (j-1)*3*3*4 + (k-1)*3*4,:) = [row(:) col1(:) val1(:)];
