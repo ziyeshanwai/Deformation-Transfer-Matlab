@@ -46,7 +46,7 @@ for i=1:length(FS4)                 %*- For ith triangle
             U1 = FS4(i,:); U2 = FS4(Adj_idx(i,j),:); % U1 U2 是两个共享三角形的点序
             for k=1:3   %x, y, z
                 row = repmat((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3, [4 1]);
-                col1 = repmat( (U1-1)*3 + k, [3 1])';  % 什么意思？
+                col1 = repmat( (U1-1)*3 + k, [3 1])';
                 val1 = ws.*E{i}';%*- value which corresponds to non-overlapping vertices
                 if sum(constid(1,:))                    %Constrinat exist
 %                     C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) = C1((1:3)+(i-1)*3*3*3 + (j-1)*3*3 + (k-1)*3 , 1) ...
