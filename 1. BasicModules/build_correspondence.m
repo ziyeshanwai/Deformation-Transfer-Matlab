@@ -98,7 +98,7 @@ for i=1:size(FT,1)
     temp = unique(tempcorres(i,:));
     corres{i} = temp(temp>0);
 end
-
+save(string(Name), 'corres');
 end
 
 
