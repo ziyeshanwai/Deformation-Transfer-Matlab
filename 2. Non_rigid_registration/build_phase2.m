@@ -49,7 +49,7 @@ function [ valid ] = find_closest_validpt(spt, snormal, vpts, VTN)
            valid = ind(i);
            break;
         else
-           valid = []
+           valid = [];
         end
     end
 end
