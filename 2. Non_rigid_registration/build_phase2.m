@@ -48,6 +48,8 @@ function [ valid ] = find_closest_validpt(spt, snormal, vpts, VTN)
         if acos(snormal * VTN(ind(i),:)') < pi/2
            valid = ind(i);
            break;
+        else
+           valid = []
         end
     end
 end
