@@ -6,12 +6,14 @@ function [ Adj_idx ] = build_adjacency( FS )
 %       FS : Triangle indices of source mesh
 %   Output
 %       Adj_idx : # of triangle x 3 for 3-connectivity adjacency
+% Adj_idx 存储共享某条边的三角形的点序的索引
 %% 
 Adj_idx = zeros(length(FS), 3); % Adjacent triangles for each edges
 % reverseStr=[];
+tic
 parfor i=1:length(FS)
     for j=1:3                
-        idx = find(sum(FS==FS(i, j),2) & sum(FS==FS(i, mod(j,3)+1),2));
+        idx = find(sum(FS==FS(i, j),2) & sum(FS==FS(i, mod(j,3)+1),2));  % 实现循环
         if sum(idx~=i)
             Adj_idx(i,j) = idx(idx ~= i);
         end
@@ -22,6 +24,7 @@ parfor i=1:length(FS)
 %         reverseStr = repmat(sprintf('\b'), 1, length(msg));
 %     end
 end
+toc
 clear idx;
 
 end

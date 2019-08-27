@@ -25,9 +25,18 @@ for j = 1:S_size
         valid_pt(j, :) = [j marker(marker(:,1)==j,2)];
     else
 %         valid_pt(j, :) = [j find_closest_validpt(T_tree, VS(j,:), VSN(j,:), VTN)];
+        if find_closest_validpt(VS(j,:), VSN(j,:), VT, VTN) == []
+            fprintf("there is 0");
+        end
+%         find_closest_validpt(VS(j,:), VSN(j,:), VT, VTN)  
         valid_pt(j, :) = [j find_closest_validpt(VS(j,:), VSN(j,:), VT, VTN)];
     end
-    C_P2((1:3) + (j-1)*3, 1) = wc .* VT(valid_pt(j, 2),:)';
+    if length(find_closest_validpt(VS(j,:), VSN(j,:), VT, VTN)) == 0
+        fprintf('valid is %f %f\n', valid_pt(j, :));
+        fprintf("there is 0....")
+    else
+        C_P2((1:3) + (j-1)*3, 1) = wc .* VT(valid_pt(j, 2),:)';
+    end
     if ~mod(j, 10000)
         msg = sprintf('Processed %d/%d', j, S_size);
         fprintf([reverseStr, msg]);
@@ -49,7 +58,7 @@ function [ valid ] = find_closest_validpt(spt, snormal, vpts, VTN)
            valid = ind(i);
            break;
         else
-           valid = [];
+            valid = [];
         end
     end
 end
