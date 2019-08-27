@@ -52,8 +52,7 @@ end
 b0(5:7) = t';
 b0(8) = s;
 % b0(8:10) = s;
-
-options = optimoptions('lsqnonlin','MaxFunctionEvaluations', 100000);
+options = optimoptions('lsqnonlin','MaxFunctionEvaluations', 100000); %再一次进行优化
 options.Algorithm = 'levenberg-marquardt';
 [b, res, resi] = lsqnonlin(@(b) resSimXform( b,double(A),double(B) ),(double(b0)),[],[],options);
 % [-Inf -Inf -Inf -Inf -Inf -Inf 0],[Inf Inf Inf Inf Inf Inf Inf]
@@ -61,6 +60,7 @@ n = size(A,2);
 r = b(1:4);
 t = b(5:7);
 s = b(8);
+
 % s = b(8:10);
 R = vrrotvec2mat(r);
 rot_A = diag(s) * R * A + repmat(t', 1, n);

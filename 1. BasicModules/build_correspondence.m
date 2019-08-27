@@ -31,14 +31,14 @@ VS_C = zeros(size(FS,1),3);
 VT_C = zeros(size(FT,1),3);
 %   Initial Triangle Correspondence
 for i=1:length(FT)
-    VT_C(i,:) = mean(VT(FT(i,:),:))';     %Centroids of target     
+    VT_C(i,:) = mean(VT(FT(i,:),:))';     %Centroids of target 每个三角形的中心坐标    
 end
 for i=1:length(FS)
     VS_C(i,:) = mean(VS(FS(i,:),:))';     %Centroids of source
 end
 
-S_tree = kd_tree(VS_C);
-T_tree = kd_tree(VT_C);
+S_tree = kd_tree(VS_C); % create Soure kd tree
+T_tree = kd_tree(VT_C); % create Target kd tree
 
 corres1 = zeros(length(FT), maxind);
 corres2 = zeros(length(FT), maxind);
@@ -59,7 +59,10 @@ for i=1:size(FS,1)
         for j = 1:len
             templength = max([rowlen+1 length(corres2(corres2(corresind(j),:)>0))]);
             rowlen = length(corres2(corres2(corresind(j),:)>0));
-            corres2(corresind(j), rowlen+1) = i;
+            if rowlen ~= 0
+                 corres2(corresind(j), rowlen+1) = i;
+            end
+            corres2(corresind(j), rowlen+1) = i; % 从源角度来看目标第i个三角形与那些源的三角形索引对应
         end
     end
     
